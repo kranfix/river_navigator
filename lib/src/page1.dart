@@ -4,15 +4,8 @@ import 'package:river_navigator/src/flow_page.dart';
 
 final counterProvider = StateProvider((ref) => 0);
 
-class Page1 extends StatefulWidget {
+class Page1 extends StatelessWidget {
   const Page1({Key? key}) : super(key: key);
-
-  @override
-  _Page1State createState() => _Page1State();
-}
-
-class _Page1State extends State<Page1> {
-  var showProvider = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +16,12 @@ class _Page1State extends State<Page1> {
       body: Center(
         child: Column(
           children: [
-            if (showProvider)
-              Consumer(
-                builder: (_, ref, __) {
-                  final counter = ref.watch(counterProvider).state;
-                  return Text('$counter');
-                },
-              )
-            else
-              Text('No provider'),
+            Consumer(
+              builder: (_, ref, __) {
+                final counter = ref.watch(counterProvider).state;
+                return Text('$counter');
+              },
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => FlowPage.navigate(context),
@@ -43,11 +33,7 @@ class _Page1State extends State<Page1> {
       floatingActionButton: Consumer(
         builder: (_, ref, __) => FloatingActionButton(
           onPressed: () {
-            if (showProvider) {
-              ref.read(counterProvider).state++;
-            } else {
-              setState(() => showProvider = true);
-            }
+            ref.read(counterProvider).state++;
           },
           child: Icon(Icons.add),
         ),
