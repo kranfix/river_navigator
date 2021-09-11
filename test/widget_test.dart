@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:river_navigator/main.dart';
 import 'package:river_navigator/src/flow_page.dart';
 import 'package:river_navigator/src/page1.dart';
+import 'package:river_navigator/src/page2.dart';
 import 'src/widgets/counter_scaffold_test.dart';
 
 extension AppTester on WidgetTester {
@@ -55,6 +56,14 @@ void main() {
     testWidgets('Go to Page3, pop and pop must go to Page1',
         (WidgetTester tester) async {
       final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
+
+      final page2 = find.descendant(
+        of: flowPage,
+        matching: find.byType(Page2),
+      );
+      expect(page2, findsOneWidget);
+
+      //expect(page2.findCounter(0), findsOneWidget);
 
       //await tester.tap(goToFlowButton);
     }, skip: true);
