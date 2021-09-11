@@ -1,30 +1,67 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:river_navigator/main.dart';
+import 'package:river_navigator/src/flow_page.dart';
+import 'package:river_navigator/src/page1.dart';
+import 'src/widgets/counter_scaffold_test.dart';
+
+extension AppTester on WidgetTester {
+  Future<void> pumpApp() {
+    return pumpWidget(const ProviderScope(child: RiverNavigatorApp()));
+  }
+
+  Future<Finder> fromPage1ToFlowPage({int counter = 0}) async {
+    await pumpApp();
+    final page1 = find.byType(Page1);
+    final goToFlowButton = find.descendant(
+      of: page1,
+      matching: find.byType(ElevatedButton),
+    );
+
+    if (counter > 0) {
+      incrementCounter(page1, times: counter);
+    }
+
+    await tap(goToFlowButton);
+    await pumpAndSettle(const Duration(milliseconds: 400));
+    final flowPage = find.byType(FlowPage);
+    return flowPage;
+  }
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  group('From Page1 to Page2', () {
+    testWidgets('Page1 to FlowPage', (WidgetTester tester) async {
+      await tester.pumpApp();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      final page1 = find.byType(Page1);
+      expect(find.byType(Page1), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      final goToFlowButton = find.descendant(
+        of: page1,
+        matching: find.byType(ElevatedButton),
+      );
+      expect(goToFlowButton, findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      await tester.tap(goToFlowButton);
+      await tester.pumpAndSettle(const Duration(milliseconds: 400));
+
+      final flowPage = find.byType(FlowPage);
+      expect(flowPage, findsOneWidget);
+    });
+
+    testWidgets('Go to Page3, pop and pop must go to Page1',
+        (WidgetTester tester) async {
+      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
+
+      //await tester.tap(goToFlowButton);
+    }, skip: true);
+
+    testWidgets('Replace to Page3 and pop must go to Page1',
+        (WidgetTester tester) async {
+      tester.pumpApp();
+    }, skip: true);
   });
 }
