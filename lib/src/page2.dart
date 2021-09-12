@@ -30,7 +30,7 @@ class _Page2State extends State<Page2> {
         ),
         const SizedBox(height: 20),
         ElevatedButton(
-          key: const Key('replace_button'),
+          key: const Key('replace_with_page3'),
           onPressed: () => Page3.replace(context),
           child: Text('Push Replacement Page3'),
         ),
