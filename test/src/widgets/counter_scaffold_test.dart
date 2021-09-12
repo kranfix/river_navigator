@@ -26,6 +26,15 @@ extension CounterScaffoldTester on WidgetTester {
   }
 }
 
+extension CounterFinder on Finder {
+  Finder findCounter(int count) {
+    return find.descendant(
+      of: this,
+      matching: find.text('$count'),
+    );
+  }
+}
+
 void main() {
   testWidgets('counter scaffold', (tester) async {
     await tester.pumpCounter();
@@ -34,28 +43,21 @@ void main() {
 
     expect(counterScaffold, findsOneWidget);
 
-    Finder findCount(int count) {
-      return find.descendant(
-        of: counterScaffold,
-        matching: find.text('$count'),
-      );
-    }
-
-    expect(findCount(0), findsOneWidget);
-    expect(findCount(1), findsNothing);
+    expect(counterScaffold.findCounter(0), findsOneWidget);
+    expect(counterScaffold.findCounter(1), findsNothing);
 
     await tester.incrementCounter(counterScaffold);
     await tester.pump();
 
-    expect(findCount(0), findsNothing);
-    expect(findCount(1), findsOneWidget);
-    expect(findCount(2), findsNothing);
+    expect(counterScaffold.findCounter(0), findsNothing);
+    expect(counterScaffold.findCounter(1), findsOneWidget);
+    expect(counterScaffold.findCounter(2), findsNothing);
 
     await tester.incrementCounter(counterScaffold);
     await tester.pump();
 
-    expect(findCount(1), findsNothing);
-    expect(findCount(2), findsOneWidget);
-    expect(findCount(3), findsNothing);
+    expect(counterScaffold.findCounter(1), findsNothing);
+    expect(counterScaffold.findCounter(2), findsOneWidget);
+    expect(counterScaffold.findCounter(3), findsNothing);
   });
 }
