@@ -24,11 +24,13 @@ class _Page2State extends State<Page2> {
       title: 'Page 2 ',
       children: [
         ElevatedButton(
+          key: const Key('push_button'),
           onPressed: () => Page3.navigate(context),
           child: Text('Push Page3'),
         ),
         const SizedBox(height: 20),
         ElevatedButton(
+          key: const Key('replace_button'),
           onPressed: () => Page3.replace(context),
           child: Text('Push Replacement Page3'),
         ),
