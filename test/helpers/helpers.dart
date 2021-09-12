@@ -8,6 +8,13 @@ extension DecendantFinder on Finder {
       matching: find.byType(type),
     );
   }
+
+  Finder descendantByKey(Key key) {
+    return find.descendant(
+      of: this,
+      matching: find.byKey(key),
+    );
+  }
 }
 
 extension AppTester on WidgetTester {
