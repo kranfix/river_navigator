@@ -22,7 +22,7 @@ extension AppTester on WidgetTester {
     );
 
     if (counter > 0) {
-      incrementCounter(page1, times: counter);
+      await incrementCounter(page1, times: counter);
     }
 
     await tap(goToFlowButton);
@@ -53,9 +53,11 @@ void main() {
       expect(flowPage, findsOneWidget);
     });
 
-    testWidgets('Go to Page3, pop and pop must go to Page1',
+    testWidgets('Go to Page2 and pop must go to Page1',
         (WidgetTester tester) async {
       final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
+
+      expect(flowPage, findsOneWidget);
 
       final page2 = find.descendant(
         of: flowPage,
@@ -63,10 +65,38 @@ void main() {
       );
       expect(page2, findsOneWidget);
 
-      //expect(page2.findCounter(0), findsOneWidget);
+      expect(page2.findCounter(0), findsOneWidget);
+
+      await tester.incrementCounter(page2, times: 10);
+      expect(page2.findCounter(10), findsOneWidget);
+
+      final popButton = find.descendant(
+        of: page2,
+        matching: find.byType(BackButton),
+      );
+      expect(popButton, findsOneWidget);
+      await tester.tap(popButton);
+      await tester.pumpAndSettle(const Duration(milliseconds: 400));
+
+      expect(find.byType(Page1), findsOneWidget);
+    });
+
+    testWidgets('Go to Page3, pop and pop must go to Page1',
+        (WidgetTester tester) async {
+      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
+
+      expect(flowPage, findsOneWidget);
+
+      final page2 = find.descendant(
+        of: flowPage,
+        matching: find.byType(Page2),
+      );
+      expect(page2, findsOneWidget);
+
+      expect(page2.findCounter(0), findsOneWidget);
 
       //await tester.tap(goToFlowButton);
-    }, skip: true);
+    });
 
     testWidgets('Replace to Page3 and pop must go to Page1',
         (WidgetTester tester) async {
