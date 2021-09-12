@@ -24,7 +24,7 @@ class _Page2State extends State<Page2> {
       title: 'Page 2 ',
       children: [
         ElevatedButton(
-          key: const Key('push_button'),
+          key: const Key('push_page3'),
           onPressed: () => Page3.navigate(context),
           child: Text('Push Page3'),
         ),
