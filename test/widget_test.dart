@@ -173,5 +173,26 @@ void main() {
       await tester.tapBackButton(page3);
       expect(page1, findsOneWidget);
     });
+
+    testWidgets('Tap on pop button on Page3 must go to Page1',
+        (WidgetTester tester) async {
+      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
+      final page2 = flowPage.descendantByType(Page2);
+      expect(page2.findCounter(0), findsOneWidget);
+      await tester.incrementCounter(page2, times: 10);
+
+      final page3 = await tester.replaceWithPage3(page2);
+      expect(page3.findCounter(10), findsOneWidget);
+
+      final page1 = find.byType(Page1);
+      expect(page1, findsNothing);
+
+      await tester.tapBackButton(page3, type: ElevatedButton);
+
+      expect(page1, findsOneWidget);
+      expect(flowPage, findsNothing);
+      expect(page2, findsNothing);
+      expect(page3, findsNothing);
+    });
   });
 }
