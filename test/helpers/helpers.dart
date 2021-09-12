@@ -18,8 +18,8 @@ extension DecendantFinder on Finder {
 }
 
 extension AppTester on WidgetTester {
-  Future<void> tapBackButton(Finder page) async {
-    final popButton = page.descendantByType(BackButton);
+  Future<void> tapBackButton(Finder page, {Type type = BackButton}) async {
+    final popButton = page.descendantByType(type);
     expect(popButton, findsOneWidget);
     await tap(popButton);
     await pumpAndSettle(const Duration(milliseconds: 400));
