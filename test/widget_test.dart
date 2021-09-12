@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:river_navigator/main.dart';
-import 'package:river_navigator/src/flow_page.dart';
-import 'package:river_navigator/src/page1.dart';
-import 'package:river_navigator/src/page2.dart';
+import 'package:river_navigator/src/app/app.dart';
+import 'package:river_navigator/src/pages/pages.dart';
+
 import 'src/widgets/counter_scaffold_test.dart';
 import 'helpers/helpers.dart';
 
@@ -27,6 +26,38 @@ extension AppTester on WidgetTester {
     await pumpAndSettle(const Duration(milliseconds: 400));
     final flowPage = find.byType(FlowPage);
     return flowPage;
+  }
+}
+
+extension Page2NavigatorTester on WidgetTester {
+  Future<Finder> pushPage3(Finder page2) async {
+    final page3 = find.byType(Page3);
+    expect(page3, findsNothing);
+
+    final pushPage3Button = page2.descendantByKey(const Key('push_page3'));
+    expect(pushPage3Button, findsOneWidget);
+    await tap(pushPage3Button);
+    await pumpAndSettle(const Duration(milliseconds: 400));
+
+    expect(page2, findsNothing);
+    expect(page3, findsOneWidget);
+    return page3;
+  }
+
+  Future<Finder> replaceWithPage3(Finder page2) async {
+    final page3 = find.byType(Page3);
+    expect(page3, findsNothing);
+
+    final replaceWithPage3Button = page2.descendantByKey(
+      const Key('replace_with_page3'),
+    );
+    expect(replaceWithPage3Button, findsOneWidget);
+    await tap(replaceWithPage3Button);
+    await pumpAndSettle(const Duration(milliseconds: 400));
+
+    expect(page2, findsNothing);
+    expect(page3, findsOneWidget);
+    return page3;
   }
 }
 
@@ -102,26 +133,45 @@ void main() {
 
       expect(page2.findCounter(0), findsOneWidget);
     });
+  });
 
-    testWidgets('Push Page3 from Page2 must keep the same counter',
+  group('Page3 pushed from Page2', () {
+    testWidgets('Page3 and Page2 must keep the same counter',
         (WidgetTester tester) async {
       final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
       final page2 = flowPage.descendantByType(Page2);
       expect(page2.findCounter(0), findsOneWidget);
-      await tester.incrementCounter(page2, times: 10);
-    }, skip: true);
+      final page3 = await tester.pushPage3(page2);
+      expect(page3.findCounter(0), findsOneWidget);
+      await tester.tapBackButton(page3);
 
-    testWidgets('Go to Page3, pop and pop must go to Page1',
-        (WidgetTester tester) async {
+      await tester.incrementCounter(page2, times: 10);
+      await tester.pushPage3(page2);
+      expect(page3.findCounter(10), findsOneWidget);
+
+      await tester.incrementCounter(page3, times: 2);
+
+      expect(page3.findCounter(12), findsOneWidget);
+      await tester.tapBackButton(page3);
+      expect(page2.findCounter(12), findsOneWidget);
+    });
+  });
+
+  group('Page3 replaces Page2', () {
+    testWidgets('Pop on Page3 must go to Page1', (WidgetTester tester) async {
       final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
       final page2 = flowPage.descendantByType(Page2);
       expect(page2.findCounter(0), findsOneWidget);
       await tester.incrementCounter(page2, times: 10);
-    }, skip: true);
 
-    testWidgets('Replace to Page3 and pop must go to Page1',
-        (WidgetTester tester) async {
-      tester.pumpApp();
-    }, skip: true);
+      final page3 = await tester.replaceWithPage3(page2);
+      expect(page3.findCounter(10), findsOneWidget);
+
+      final page1 = find.byType(Page1);
+      expect(page1, findsNothing);
+
+      await tester.tapBackButton(page3);
+      expect(page1, findsOneWidget);
+    });
   });
 }

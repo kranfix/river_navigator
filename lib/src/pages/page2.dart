@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:river_navigator/src/page3.dart';
+import 'package:river_navigator/src/pages/page3.dart';
 import 'package:river_navigator/src/widgets/counter_scaffold.dart';
 
-class Page2 extends StatefulWidget {
+class Page2 extends StatelessWidget {
   const Page2({Key? key}) : super(key: key);
 
-  @override
-  _Page2State createState() => _Page2State();
-
-  static Future<void> navigate(BuildContext context) {
-    return Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Page2(),
-      ),
-    );
-  }
-}
-
-class _Page2State extends State<Page2> {
   @override
   Widget build(BuildContext context) {
     return CounterScaffold(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:river_navigator/src/page2.dart';
+import 'package:river_navigator/src/pages/page2.dart';
 import 'package:river_navigator/src/widgets/counter_scaffold.dart';
 
 class FlowPage extends StatefulWidget {
@@ -64,7 +64,6 @@ class _FlowPageState extends State<FlowPage> with FlowController {
           ...pages,
         ],
         onPopPage: (route, result) {
-          print('verde pintado de azul: ${pages.length}');
           pop();
           return route.didPop(result);
         },

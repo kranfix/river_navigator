@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:river_navigator/src/flow_page.dart';
+import 'package:river_navigator/src/pages/flow_page.dart';
 import 'package:river_navigator/src/widgets/counter_scaffold.dart';
 
 class Page1 extends StatelessWidget {
