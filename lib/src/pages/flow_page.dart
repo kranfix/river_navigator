@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:river_navigator/src/pages/page2.dart';
-import 'package:river_navigator/src/widgets/counter_scaffold.dart';
+import 'package:river_navigator/src/widgets/widgets.dart';
 
 class FlowPage extends StatefulWidget {
   const FlowPage({Key? key}) : super(key: key);

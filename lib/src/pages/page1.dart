@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:river_navigator/src/pages/flow_page.dart';
-import 'package:river_navigator/src/widgets/counter_scaffold.dart';
+import 'package:river_navigator/src/widgets/widgets.dart';
 
 class Page1 extends StatelessWidget {
   const Page1({Key? key}) : super(key: key);

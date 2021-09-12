@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:river_navigator/src/app/app.dart';
 import 'package:river_navigator/src/pages/pages.dart';
 
-import 'src/widgets/counter_scaffold_test.dart';
+import '../test/src/widgets/counter_scaffold_test.dart';
 import 'helpers/helpers.dart';
 
 extension AppTester on WidgetTester {
