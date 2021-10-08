@@ -11,7 +11,7 @@ class Page1 extends StatelessWidget {
       title: 'Page 1',
       children: [
         ElevatedButton(
-          onPressed: () => FlowPage.navigate(context),
+          onPressed: () => CounterFlow.navigate(context),
           child: Text('Go to page 2 in FlowPage'),
         ),
       ],

@@ -24,7 +24,7 @@ extension AppTester on WidgetTester {
 
     await tap(goToFlowButton);
     await pumpAndSettle(const Duration(milliseconds: 400));
-    final flowPage = find.byType(FlowPage);
+    final flowPage = find.byType(CounterFlow);
     return flowPage;
   }
 }
@@ -75,7 +75,7 @@ void main() {
       await tester.tap(goToFlowButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 400));
 
-      final flowPage = find.byType(FlowPage);
+      final flowPage = find.byType(CounterFlow);
       expect(flowPage, findsOneWidget);
       final page2 = flowPage.descendantByType(Page2);
       expect(page2, findsOneWidget);
