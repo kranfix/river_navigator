@@ -3,22 +3,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:river_navigator/src/pages/page2.dart';
 import 'package:river_navigator/src/widgets/widgets.dart';
 
-class FlowPage extends StatefulWidget {
-  const FlowPage({Key? key}) : super(key: key);
+class CounterFlow extends StatefulWidget {
+  const CounterFlow({Key? key}) : super(key: key);
 
   @override
-  _FlowPageState createState() => _FlowPageState();
+  _CounterFlowState createState() => _CounterFlowState();
 
   static Future<void> navigate(BuildContext context) {
     return Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => FlowPage(),
+        builder: (context) => CounterFlow(),
       ),
     );
   }
 
   static FlowController of(BuildContext context) {
-    return context.findAncestorStateOfType<_FlowPageState>()!;
+    return context.findAncestorStateOfType<_CounterFlowState>()!;
+  }
+}
+
+class CounterPage extends StatefulWidget {
+  const CounterPage({Key? key}) : super(key: key);
+
+  @override
+  _CounterFlowState createState() => _CounterFlowState();
+
+  static Future<void> navigate(BuildContext context) {
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CounterFlow(),
+      ),
+    );
+  }
+
+  static FlowController of(BuildContext context) {
+    return context.findAncestorStateOfType<_CounterFlowState>()!;
   }
 }
 
@@ -28,7 +47,7 @@ mixin FlowController {
   void replaceWith(Page<dynamic> page);
 }
 
-class _FlowPageState extends State<FlowPage> with FlowController {
+class _CounterFlowState extends State<CounterFlow> with FlowController {
   final pages = <Page<dynamic>>[
     const MaterialPage(child: Page2()),
   ];

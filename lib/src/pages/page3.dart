@@ -6,13 +6,13 @@ class Page3 extends StatelessWidget {
   const Page3({Key? key}) : super(key: key);
 
   static void navigate(BuildContext context) {
-    return FlowPage.of(context).push(
+    return CounterFlow.of(context).push(
       const MaterialPage(child: Page3()),
     );
   }
 
   static void replace(BuildContext context) {
-    return FlowPage.of(context).replaceWith(
+    return CounterFlow.of(context).replaceWith(
       const MaterialPage(child: Page3()),
     );
   }
@@ -23,7 +23,7 @@ class Page3 extends StatelessWidget {
       title: 'Page 3',
       children: [
         ElevatedButton(
-          onPressed: () => FlowPage.of(context).pop(),
+          onPressed: () => CounterFlow.of(context).pop(),
           child: Text('pop'),
         ),
       ],
