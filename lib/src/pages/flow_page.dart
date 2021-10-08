@@ -54,10 +54,7 @@ class _FlowPageState extends State<FlowPage> with FlowController {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
-      overrides: [
-        counterProvider.overrideWithProvider(counterProvider),
-      ],
+    return FlowProviderScope(
       child: Navigator(
         pages: [
           const MaterialPage(child: Offstage()),
@@ -68,6 +65,35 @@ class _FlowPageState extends State<FlowPage> with FlowController {
           return route.didPop(result);
         },
       ),
+    );
+  }
+}
+
+class FlowProviderScope extends ConsumerStatefulWidget {
+  const FlowProviderScope({Key? key, required this.child}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  _FlowProviderScopeState createState() => _FlowProviderScopeState();
+}
+
+class _FlowProviderScopeState extends ConsumerState<FlowProviderScope> {
+  final counterValue = StateController(0);
+
+  @override
+  void dispose() {
+    super.dispose();
+    counterValue.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      overrides: [
+        counterProvider.overrideWithValue(counterValue),
+      ],
+      child: widget.child,
     );
   }
 }
