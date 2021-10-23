@@ -12,7 +12,7 @@ class Page1 extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () => CounterFlow.navigate(context),
-          child: Text('Go to page 2 in FlowPage'),
+          child: Text('Go to page 2 in CounterFlow'),
         ),
       ],
     );

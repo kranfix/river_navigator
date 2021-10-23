@@ -13,7 +13,7 @@ extension AppTester on WidgetTester {
     return pumpWidget(const ProviderScope(child: RiverNavigatorApp()));
   }
 
-  Future<Finder> fromPage1ToFlowPage({int counter = 0}) async {
+  Future<Finder> fromPage1ToCounterFlow({int counter = 0}) async {
     await pumpApp();
     final page1 = find.byType(Page1);
     final goToFlowButton = page1.descendantByType(ElevatedButton);
@@ -24,8 +24,8 @@ extension AppTester on WidgetTester {
 
     await tap(goToFlowButton);
     await pumpAndSettle(const Duration(milliseconds: 400));
-    final flowPage = find.byType(CounterFlow);
-    return flowPage;
+    final counterFlow = find.byType(CounterFlow);
+    return counterFlow;
   }
 }
 
@@ -67,7 +67,7 @@ void main() {
       await tester.pumpApp();
 
       final page1 = find.byType(Page1);
-      expect(find.byType(Page1), findsOneWidget);
+      expect(page1, findsOneWidget);
 
       final goToFlowButton = page1.descendantByType(ElevatedButton);
       expect(goToFlowButton, findsOneWidget);
@@ -75,19 +75,20 @@ void main() {
       await tester.tap(goToFlowButton);
       await tester.pumpAndSettle(const Duration(milliseconds: 400));
 
-      final flowPage = find.byType(CounterFlow);
-      expect(flowPage, findsOneWidget);
-      final page2 = flowPage.descendantByType(Page2);
+      final counterFlow = find.byType(CounterFlow);
+      expect(counterFlow, findsOneWidget);
+      final page2 = counterFlow.descendantByType(Page2);
       expect(page2, findsOneWidget);
-      expect(find.byType(Page1), findsNothing);
+      expect(page1, findsNothing);
+      expect(counterFlow.descendantByType(Page3), findsNothing);
     });
 
     testWidgets('Go to Page2 and pop must go to Page1',
         (WidgetTester tester) async {
-      final flowPage = await tester.fromPage1ToFlowPage();
-      expect(flowPage, findsOneWidget);
+      final counterFlow = await tester.fromPage1ToCounterFlow();
+      expect(counterFlow, findsOneWidget);
 
-      final page2 = flowPage.descendantByType(Page2);
+      final page2 = counterFlow.descendantByType(Page2);
       await tester.tapBackButton(page2);
 
       expect(find.byType(Page1), findsOneWidget);
@@ -97,8 +98,8 @@ void main() {
     testWidgets(
         'Go to Page2, increments and pop must go to Page1 and keep the counter',
         (WidgetTester tester) async {
-      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
-      final page2 = flowPage.descendantByType(Page2);
+      final counterFlow = await tester.fromPage1ToCounterFlow(counter: 5);
+      final page2 = counterFlow.descendantByType(Page2);
 
       expect(page2.findCounter(0), findsOneWidget);
       await tester.incrementCounter(page2, times: 10);
@@ -118,8 +119,8 @@ void main() {
 
     testWidgets('Page2 is reset on pop and pushing it again',
         (WidgetTester tester) async {
-      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
-      final page2 = flowPage.descendantByType(Page2);
+      final counterFlow = await tester.fromPage1ToCounterFlow(counter: 5);
+      final page2 = counterFlow.descendantByType(Page2);
       await tester.incrementCounter(page2, times: 10);
       expect(page2.findCounter(10), findsOneWidget);
 
@@ -129,7 +130,7 @@ void main() {
       expect(page1, findsOneWidget);
       expect(page1.findCounter(5), findsOneWidget);
 
-      await tester.fromPage1ToFlowPage(counter: 5);
+      await tester.fromPage1ToCounterFlow(counter: 5);
 
       expect(page2.findCounter(0), findsOneWidget);
     });
@@ -138,8 +139,8 @@ void main() {
   group('Page3 pushed from Page2', () {
     testWidgets('Page3 and Page2 must keep the same counter',
         (WidgetTester tester) async {
-      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
-      final page2 = flowPage.descendantByType(Page2);
+      final counterFlow = await tester.fromPage1ToCounterFlow(counter: 5);
+      final page2 = counterFlow.descendantByType(Page2);
       expect(page2.findCounter(0), findsOneWidget);
       final page3 = await tester.pushPage3(page2);
       expect(page3.findCounter(0), findsOneWidget);
@@ -159,8 +160,8 @@ void main() {
 
   group('Page3 replaces Page2', () {
     testWidgets('Pop on Page3 must go to Page1', (WidgetTester tester) async {
-      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
-      final page2 = flowPage.descendantByType(Page2);
+      final counterFlow = await tester.fromPage1ToCounterFlow(counter: 5);
+      final page2 = counterFlow.descendantByType(Page2);
       expect(page2.findCounter(0), findsOneWidget);
       await tester.incrementCounter(page2, times: 10);
 
@@ -176,8 +177,8 @@ void main() {
 
     testWidgets('Tap on pop button on Page3 must go to Page1',
         (WidgetTester tester) async {
-      final flowPage = await tester.fromPage1ToFlowPage(counter: 5);
-      final page2 = flowPage.descendantByType(Page2);
+      final counterFlow = await tester.fromPage1ToCounterFlow(counter: 5);
+      final page2 = counterFlow.descendantByType(Page2);
       expect(page2.findCounter(0), findsOneWidget);
       await tester.incrementCounter(page2, times: 10);
 
@@ -190,7 +191,7 @@ void main() {
       await tester.tapBackButton(page3, type: ElevatedButton);
 
       expect(page1, findsOneWidget);
-      expect(flowPage, findsNothing);
+      expect(counterFlow, findsNothing);
       expect(page2, findsNothing);
       expect(page3, findsNothing);
     });
