@@ -23,7 +23,10 @@ class CounterScaffold extends StatelessWidget {
             Consumer(
               builder: (_, ref, __) {
                 final counter = ref.watch(counterProvider).state;
-                return Text('$counter');
+                return Text(
+                  '$counter',
+                  style: TextStyle(fontSize: 70),
+                );
               },
             ),
             const SizedBox(height: 20),
