@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:river_navigator/src/pages/counter_flow/flow_provider_scope.dart';
 
 mixin FlowController {
   void pop();
@@ -44,17 +43,15 @@ class _FlowScopeState extends State<FlowScope> with FlowController {
 
   @override
   Widget build(BuildContext context) {
-    return FlowProviderScope(
-      child: Navigator(
-        pages: [
-          const MaterialPage(child: Offstage()),
-          ...pages,
-        ],
-        onPopPage: (route, result) {
-          pop();
-          return route.didPop(result);
-        },
-      ),
+    return Navigator(
+      pages: [
+        const MaterialPage(child: Offstage()),
+        ...pages,
+      ],
+      onPopPage: (route, result) {
+        pop();
+        return route.didPop(result);
+      },
     );
   }
 }
