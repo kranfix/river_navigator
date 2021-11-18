@@ -22,7 +22,7 @@ class CounterScaffold extends StatelessWidget {
             const SizedBox(height: 20),
             Consumer(
               builder: (_, ref, __) {
-                final counter = ref.watch(counterProvider).state;
+                final counter = ref.watch(counterProvider);
                 return Text(
                   '$counter',
                   style: TextStyle(fontSize: 70),
@@ -37,7 +37,8 @@ class CounterScaffold extends StatelessWidget {
       floatingActionButton: Consumer(
         builder: (_, ref, __) => FloatingActionButton(
           onPressed: () {
-            ref.read(counterProvider).state++;
+            final notifier = ref.read(counterProvider.notifier);
+            notifier.state++;
           },
           child: Icon(Icons.add),
         ),
